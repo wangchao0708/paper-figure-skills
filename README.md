@@ -4,6 +4,16 @@
 
 支持 venue：CVPR、ICCV、NeurIPS、ICLR、ICML、ACL、AAAI、ACM MM、CCS、S&P、USENIX Security、NDSS、TIFS、TPAMI、IJCV、TMM。
 
+## 示例
+
+一页对比 NeurIPS single 与 double：single 使用 48% 文本宽度，double 使用完整文本宽度，中间配有说明文字。
+
+[打开 PDF](examples/showcase-neurips.pdf)
+
+<img src="examples/showcase-neurips.png" width="720" alt="NeurIPS single and double figure layout examples">
+
+源文件：`examples/showcase-neurips.tex`。两张图分别由 `examples/make_examples.py` 生成。
+
 ## 安装
 
 要求：macOS + MacTeX；Python 3.10+；`pdffonts`（poppler）在 `PATH` 中。
