@@ -12,6 +12,42 @@ def _not_ready(command: str) -> int:
     return 2
 
 
+def _run_spec(args: argparse.Namespace) -> int:
+    from .spec import format_spec_line, get_spec
+
+    try:
+        spec = get_spec(args.venue, args.layout)
+    except ValueError as exc:
+        print(f"figspec spec: {exc}", file=sys.stderr)
+        return 1
+    print(format_spec_line(spec))
+    return 0
+
+
+def _run_fonts(args: argparse.Namespace) -> int:
+    from .fonts import FontError, check_fonts, install_fonts
+
+    try:
+        if args.install:
+            results = install_fonts()
+            for source, destination, action in results:
+                print(f"{action:9} {destination}  (from {source})")
+            print("matplotlib font cache rebuilt")
+        statuses = check_fonts()
+    except FontError as exc:
+        print(f"figspec fonts: {exc}", file=sys.stderr)
+        return 1
+
+    missing = False
+    for status in statuses:
+        if status.path is None:
+            missing = True
+            print(f"MISSING   {status.family}")
+        else:
+            print(f"OK        {status.family}: {status.path}")
+    return 1 if missing else 0
+
+
 def _run_probe(args: argparse.Namespace) -> int:
     from .probe import (
         ProbeBatchError,
@@ -120,8 +156,12 @@ def main(argv: list[str] | None = None) -> int:
     if not args.command:
         parser.print_help()
         return 0
+    if args.command == "spec":
+        return _run_spec(args)
     if args.command == "probe":
         return _run_probe(args)
+    if args.command == "fonts":
+        return _run_fonts(args)
     return _not_ready(args.command)
 
 

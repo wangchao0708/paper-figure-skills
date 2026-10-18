@@ -16,6 +16,7 @@ figspec fonts --install
 
 ```bash
 figspec spec CVPR single
+figspec fonts --check
 figspec probe CVPR
 figspec probe --all
 figspec probe --tex /path/to/paper/main.tex --venue CVPR
