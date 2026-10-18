@@ -84,6 +84,15 @@ LaTeX 中按最终尺寸插入，不指定宽度：
 \includegraphics{fig.pdf}
 ```
 
+## 示例与测试
+
+```bash
+python examples/make_examples.py   # 重新生成 8 张示例图
+pytest -q                          # specs、aliases、check 自测
+```
+
+示例 PDF 位于 `examples/`。
+
 ## 每年更新模板
 
 ```bash
