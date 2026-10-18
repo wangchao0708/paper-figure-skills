@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "paper-figure-skills"
+version = "0.1.0"
+description = "Venue-aware figure specifications for academic papers"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+    "pymupdf>=1.23",
+    "pyyaml>=6",
+]
+
+[project.scripts]
+figspec = "figspec.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["figspec*"]
+
+[tool.setuptools.package-data]
+figspec = ["data/*.yaml"]
