@@ -13,7 +13,7 @@ def _not_ready(command: str) -> int:
 
 
 def _run_spec(args: argparse.Namespace) -> int:
-    from .spec import format_spec_line, get_spec
+    from .spec import format_drawio_line, format_spec_line, get_spec
 
     try:
         spec = get_spec(args.venue, args.layout)
@@ -21,6 +21,9 @@ def _run_spec(args: argparse.Namespace) -> int:
         print(f"figspec spec: {exc}", file=sys.stderr)
         return 1
     print(format_spec_line(spec))
+    drawio_line = format_drawio_line(spec)
+    if drawio_line:
+        print(drawio_line)
     return 0
 
 
@@ -51,6 +54,20 @@ def _run_preview(args: argparse.Namespace) -> int:
     for warning in result.warnings:
         print(f"WARN: {warning}")
     print(f"Opened: {'yes' if result.opened else 'no'}")
+    return 0
+
+
+def _run_calib(args: argparse.Namespace) -> int:
+    from .calib import CalibError, generate_calibration, measure_calibration, print_instructions
+
+    try:
+        if args.measure:
+            measure_calibration()
+        else:
+            print_instructions(generate_calibration())
+    except CalibError as exc:
+        print(f"figspec calib: {exc}", file=sys.stderr)
+        return 1
     return 0
 
 
@@ -172,7 +189,8 @@ def build_parser() -> argparse.ArgumentParser:
     fonts_parser.add_argument("--install", action="store_true")
     fonts_parser.add_argument("--check", action="store_true")
 
-    subparsers.add_parser("calib", help="calibrate draw.io units")
+    calib_parser = subparsers.add_parser("calib", help="calibrate draw.io units")
+    calib_parser.add_argument("--measure", action="store_true")
     fetch_parser = subparsers.add_parser("fetch", help="download official templates")
     fetch_parser.add_argument("venue", nargs="?")
     fetch_parser.add_argument("--all", action="store_true")
@@ -196,6 +214,8 @@ def main(argv: list[str] | None = None) -> int:
         return _run_preview(args)
     if args.command == "fonts":
         return _run_fonts(args)
+    if args.command == "calib":
+        return _run_calib(args)
     return _not_ready(args.command)
 
 

@@ -335,3 +335,32 @@ def format_spec_line(spec: FigureSpec) -> str:
         f"{spec.font_name} · 标签/图例 {_fmt_pt(spec.label_pt)} · "
         f"刻度 {_fmt_pt(spec.tick_pt)} · 子图标题 {_fmt_pt(spec.panel_title_pt)} (pt)"
     )
+
+
+def load_drawio_config() -> dict[str, Any] | None:
+    config = load_venue_data().get("drawio")
+    if not isinstance(config, dict):
+        return None
+    try:
+        units_per_pt = float(config["drawio_units_per_pt"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    if units_per_pt <= 0:
+        return None
+    return config
+
+
+def format_drawio_line(spec: FigureSpec, config: dict[str, Any] | None = None) -> str | None:
+    config = config or load_drawio_config()
+    if not config:
+        return None
+    try:
+        units_per_pt = float(config["drawio_units_per_pt"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    return (
+        f"draw.io: 页面宽度 {spec.width_pt * units_per_pt:.1f} px · "
+        f"标签/图例 {spec.label_pt * units_per_pt:.1f} · "
+        f"刻度 {spec.tick_pt * units_per_pt:.1f} · "
+        f"子图标题 {spec.panel_title_pt * units_per_pt:.1f}"
+    )
