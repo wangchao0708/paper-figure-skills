@@ -63,6 +63,7 @@ Snapshot date: **2026-10-17**. Templates are committed because the repository is
 ### ACM MM / CCS
 - Per BUILD.md, both use the `acmart` bundled with MacTeX rather than a downloaded copy. TeX Live 2026 ships `acmart` v2.16 (2025/08/27).
 - `sigconf` is the ACM two-column conference proceedings option. Camera-ready is the default; review/anonymity options are not used.
+- `acmart` enters its final two-column geometry inside `\maketitle`. The probe/preview template therefore contains an explicit `\twocolumn` after `\begin{document}` so it measures and previews the real column width.
 - If TeX Live is updated, record the new `acmart` version here and re-run the probes.
 
 ### IEEE S&P
@@ -82,6 +83,7 @@ Snapshot date: **2026-10-17**. Templates are committed because the repository is
 ### IEEE TIFS / TMM / TPAMI
 - These journals use the IEEEtran class from TeX Live 2026 (V1.8b), which is the official class distributed by IEEE.
 - TIFS and TMM use `journal`; TPAMI uses `journal,compsoc` (Computer Society journal mode).
+- TPAMI's `compsoc` default body font is Palatino (`URWPalladioL-Roma`), which is outside the supported times/libertine/cm families. Per user decision, `templates/tpami/min.tex` uses the IEEEtran-sanctioned `\renewcommand{\rmdefault}{ptm}` override so TPAMI uses Times and is covered by the existing font pipeline. Geometry and font sizes are unchanged by this override.
 - The class files are not duplicated into the repository because TeX Live provides the official V1.8b unchanged.
 
 ### IJCV
