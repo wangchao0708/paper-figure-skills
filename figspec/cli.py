@@ -36,6 +36,24 @@ def _run_check(args: argparse.Namespace) -> int:
     return 0 if report.ok else 1
 
 
+def _run_preview(args: argparse.Namespace) -> int:
+    from .preview import PreviewError, preview_figures
+
+    try:
+        result = preview_figures(args.venue, args.layout, args.pdfs)
+    except (PreviewError, ValueError) as exc:
+        print(f"figspec preview: {exc}", file=sys.stderr)
+        return 1
+
+    print(f"Preview: {result.pdf}")
+    print(f"Output directory: {result.output_dir}")
+    print(f"Overfull \\hbox: {result.overfull_hbox}")
+    for warning in result.warnings:
+        print(f"WARN: {warning}")
+    print(f"Opened: {'yes' if result.opened else 'no'}")
+    return 0
+
+
 def _run_fonts(args: argparse.Namespace) -> int:
     from .fonts import FontError, check_fonts, install_fonts
 
@@ -174,6 +192,8 @@ def main(argv: list[str] | None = None) -> int:
         return _run_probe(args)
     if args.command == "check":
         return _run_check(args)
+    if args.command == "preview":
+        return _run_preview(args)
     if args.command == "fonts":
         return _run_fonts(args)
     return _not_ready(args.command)
