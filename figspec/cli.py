@@ -24,6 +24,18 @@ def _run_spec(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_check(args: argparse.Namespace) -> int:
+    from .check import CheckError, check_pdf, format_report
+
+    try:
+        report = check_pdf(args.pdf, args.venue, args.layout)
+    except (CheckError, ValueError) as exc:
+        print(f"figspec check: {exc}", file=sys.stderr)
+        return 1
+    print(format_report(report))
+    return 0 if report.ok else 1
+
+
 def _run_fonts(args: argparse.Namespace) -> int:
     from .fonts import FontError, check_fonts, install_fonts
 
@@ -160,6 +172,8 @@ def main(argv: list[str] | None = None) -> int:
         return _run_spec(args)
     if args.command == "probe":
         return _run_probe(args)
+    if args.command == "check":
+        return _run_check(args)
     if args.command == "fonts":
         return _run_fonts(args)
     return _not_ready(args.command)
