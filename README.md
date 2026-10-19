@@ -6,13 +6,13 @@
 
 ## 示例
 
-一页对比 NeurIPS single 与 double：single 使用 48% 文本宽度，double 使用完整文本宽度，中间配有说明文字。
+一页展示三个 NeurIPS 图像：两个 single 子图并排（各占 48% 文本宽度），一个 double 图像占满文本宽度；三张图使用不同配色，页面裁切到内容。
 
 [打开 PDF](examples/showcase-neurips.pdf)
 
 <img src="examples/showcase-neurips.png" width="720" alt="NeurIPS single and double figure layout examples">
 
-源文件：`examples/showcase-neurips.tex`。两张图分别由 `examples/make_examples.py` 生成。
+源文件：`examples/showcase-neurips.tex`。三张图由 `examples/make_showcase_figures.py` 生成。
 
 ## 安装
 
